@@ -1,3 +1,7 @@
+import { getSeries } from "./serviceSerie.js";
+import { createSerie } from "./serviceSerie.js";
+import { deleteSerie } from "./serviceSerie.js";
+
 const series = [];
 const containerCarte = document.querySelector("#carteContainer");
 const ajouterBtn = document.getElementById("ajoute-btn");
@@ -10,8 +14,10 @@ const formulaire = document.getElementById("formulaire");
 const count = document.getElementById("compteur");
 const addGenre = document.getElementById("category");
 const ajoutForm = document.getElementById("formulaire-ajout");
-// const isAdded = null;
+const langueInput = document.getElementById("list-langue");
+const addLangue = document.getElementById("add-langue");
 
+// const isAdded = null;
 
 function afficher(data = series) {
   containerCarte.textContent = "";
@@ -27,13 +33,10 @@ function afficher(data = series) {
     );
     containerCarte.appendChild(carte);
 
-
-
-    
     const image = document.createElement("img");
-    image.src = serie.image.medium || serie.image || "";
+    image.src = serie.image?.medium || serie.image || "";
     image.alt = "thumbnail";
-    image.classList.add("rounded-t-lg", "w-full", "h-48", "object-cover");
+    image.classList.add("rounded-t-lg", "w-full", "h-70", "object-cover");
     carte.appendChild(image);
 
     const div = document.createElement("div");
@@ -74,35 +77,80 @@ function afficher(data = series) {
       "line-clamp-1",
       "md:line-clamp-2",
       "lg:line-clamp-3",
-      "p-2"
+      "p-2",
     );
-    description.innerHTML = serie.summary + " ...";
+    description.innerHTML = serie.summary + "...";
     div.appendChild(description);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+    deleteBtn.classList.add("Delete");
+    deleteBtn.classList.add(
+      "bg-[#DC143C]",
+      "text-[#FAFAFA]",
+      "w-full",
+      "rounded-lg",
+      "mt-5",
+      "mb-5",
+      "h-8.75",
+      "lg:w-37.5",
+    );
+    carte.appendChild(deleteBtn);
+
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "Modifier";
+    editBtn.classList.add(
+      "bg-[#24A0ED]",
+      "text-[#FAFAFA]",
+      "w-full",
+      "rounded-lg",
+      "mb-5",
+      "h-8.75",
+      "lg:w-37.5",
+    );
+    carte.appendChild(editBtn);
   });
 }
 
 afficher();
 
-async function getData() {
+// async function getData() {
+//   try {
+//     const response = await fetch("https://api.tvmaze.com/shows?page=0");
+//     const data = await response.json();
+//     series.push(...data.slice(0 , 20));
+//     console.log(series);
+//     afficher(series);
+//   } catch (erreur) {
+//     alert("erreur");
+//   }
+//   count.textContent = series.length + " séries affichées";
+// }
+// getData();
+
+async function getDataAxios() {
   try {
-    const response = await fetch("https://api.tvmaze.com/shows?page=0");
-    const data = await response.json();
-    series.push(...data.slice(0 , 20));
-    console.log(series);
-    afficher(series);
+    // console.log("bda...");
+
+    const data = await getSeries();
+
+    // console.log("jat data : ", data);
+
+    series.push(...data);
+    afficher(data);
   } catch (erreur) {
     alert("erreur");
   }
   count.textContent = series.length + " séries affichées";
 }
-getData();
 
-ajouterBtn.addEventListener("click", (e) => {
+ajouterBtn.addEventListener("click", async (e) => {
   e.preventDefault();
 
   const nom = nomInput.value;
   const genre = addGenre.value;
   const sum = descriptionInput.value;
+  const lang = addLangue.value;
   if (
     nomInput.value == "" ||
     addGenre.value == "" ||
@@ -111,12 +159,23 @@ ajouterBtn.addEventListener("click", (e) => {
     alert("Please fill the fields correctly");
     return;
   }
+
   const newSerie = {
     name: nom,
     genres: genre.split(","),
     summary: sum,
-    image: "assets/placeholderImage.png",
+    image: { medium: "https://placehold.net/default.png" },
+    language: lang,
   };
+  console.log(newSerie);
+
+  try {
+    const data = await createSerie(newSerie);
+    console.log(data);
+  } catch (erreur) {
+    alert(erreur);
+  }
+
   series.unshift(newSerie);
   afficher(series);
   ajoutForm.reset();
@@ -130,12 +189,19 @@ genreInput.addEventListener("change", () => {
   rechercheFiltrer();
 });
 
+langueInput.addEventListener("change", () => {
+  rechercheFiltrer();
+});
+
 function rechercheFiltrer() {
   const recherche = searchInput.value.trim().toLowerCase();
   const filtreGenre = genreInput.value;
+  const filtreLangue = langueInput.value;
   const result = series.filter((S) => {
     return (
-      S.name.toLowerCase().includes(recherche) && S.genres.includes(filtreGenre)
+      S.name.toLowerCase().includes(recherche) &&
+      S.genres.includes(filtreGenre) &&
+      S.language.includes(filtreLangue)
     );
   });
   count.textContent = result.length + " séries affichées";
@@ -147,14 +213,20 @@ resetBtn.addEventListener("click", (e) => {
   count.textContent = series.length + " séries affichées";
   afficher(series);
 });
+getDataAxios();
 
-// function filtrageGenre() {
-//   const filtreGenre = genreInput.value;
-//   // console.log(filtreGenre);
-//   const selectedGenre = series.filter((type) => {
-//     return type.genres.includes(filtreGenre)
-//   });
-//   console.log(selectedGenre);
+containerCarte.addEventListener("click", async function (event) {
+  if (event.target.classList.contains("Delete")) {
+    console.log("delete clicked");
+    confirm("etes vous sur de supprimer cette serie !?");
+    series = series.filter((serie) => serie.id !== target.id);
+    afficher();
+  }
+  try {
+    const data = await deleteSerie(suppression);
+    console.log(data);
 
-//   afficher(selectedGenre);
-// }
+  } catch (erreur) {
+    alert(erreur);
+  }
+});

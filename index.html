@@ -7,6 +7,8 @@
 
     <link rel="stylesheet" href="./css/output.css" />
     <link rel="stylesheet" href="./css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="./js/script.js"></script>
   </head>
 
   <body class="bg-[#101010] font-[inter]">
@@ -54,16 +56,27 @@
               class="border border-[#393939] rounded-lg w-full placeholder: text-[#BABABA] placeholder:p-2.5 placeholder:text-[9px]"
             />
           </div>
-</form>
-          <label for="description" class="text-[#FAFAFA] text-[12px]"
-            >Description</label
-          ><br />
-          <textarea
-            id="description"
-            placeholder="Résume la série en quelques mots…"
-            class="text-[#BABABA] w-full h-12.5 p-2.5 rounded-lg border border-gray-300 placeholder:text-gray-400 placeholder:text-[9px]"
-          ></textarea>
+        </form>
+        <label for="description" class="text-[#FAFAFA] text-[12px]"
+          >Description</label
+        ><br />
         
+        <textarea
+          id="description"
+          placeholder="Résume la série en quelques mots…"
+          class="text-[#BABABA] w-full h-12.5 p-2.5 rounded-lg border border-gray-300 placeholder:text-gray-400 placeholder:text-[9px]"
+        ></textarea>
+        <select
+                name="langues"
+                id="add-langue"
+                class="text-[#BABABA] h-8.75 border border-[#393939] rounded-lg w-full"
+              >
+                <!-- <option value="languages">Choose Language</option> -->
+                <option value="Japanese">Japanese</option>
+                <option value="English">English</option>
+                <option value="Arabic">Arabic</option>
+                <option value="French">French</option>
+              </select>
         <button
           id="ajoute-btn"
           class="bg-[#FAFAFA] w-full rounded-lg mt-5 h-8.75 lg:w-37.5"
@@ -80,7 +93,7 @@
           </p>
         </div>
 
-        <div class="lg:grid grid-rows-3">
+        <div class="lg:grid">
           <form
             id="formulaire"
             class="flex flex-col gap-1 lg:flex flex-col-none"
@@ -106,6 +119,7 @@
                 id="list-genre"
                 class="text-[#BABABA] h-8.75 border border-[#393939] rounded-lg w-full"
               >
+                <!-- <option value="genres">Choose genre</option> -->
                 <option value="Drama">Drame</option>
                 <option value="Fantasy">Fantastique</option>
                 <option value="Action">Action</option>
@@ -121,6 +135,17 @@
                 <option value="Romance">Romance</option>
               </select>
 
+              <select
+                name="langues"
+                id="list-langue"
+                class="text-[#BABABA] h-8.75 border border-[#393939] rounded-lg w-full"
+              >
+                <!-- <option value="languages">Choose Language</option> -->
+                <option value="Japanese">Japanese</option>
+                <option value="English">English</option>
+                <option value="Arabic">Arabic</option>
+                <option value="French">French</option>
+              </select>
               <button
                 id="resetButton"
                 class="bg-[#191919] w-full rounded-lg h-8.75 border border-[#393939] text-[#FAFAFA]"
@@ -140,24 +165,35 @@
         id="carteContainer"
         class="grid-cols-1 md:grid grid-cols-2 gap-6 lg:grid-cols-3 gap-6"
       >
-        <!-- <article id="serieCarte" class="bg-[#191919] border border-[#393939] rounded-lg mt-5">
-                <img src="assets/Vignette · Breaking Bad.png" alt="Breaking Bad Thumbnail"
-                    class="rounded-t-lg w-full  object-cover ">
-                
-                    <div class="pl-3">
-                    <h2 class="text-[#FAFAFA] pt-2 pb-1">Breaking Bad</h2>
-                    <div class="flex gap-3 pb-1">
-                        <h4 class="text-[11px] text-[#EEEEEE] bg-[#292929] rounded-xl text-center w-13.5 pt-0.5">Drame
-                        </h4>
-                        <h4 class="text-[11px] text-[#EEEEEE] bg-[#292929] rounded-xl text-center w-13.5 pt-0.5">
-                            Policier
-                        </h4>
-                    </div>
-                    <p class="text-[#BABABA] text-[11px] pt-1 pb-2 ">
-                        Un professeur de chimie mène une double vie.
-                    </p>
-                </div>
-            </article> -->
+        <!-- <article
+          id="serieCarte"
+          class="bg-[#191919] border border-[#393939] rounded-lg mt-5"
+        >
+          <img
+            src="assets/Vignette · Breaking Bad.png"
+            alt="Breaking Bad Thumbnail"
+            class="rounded-t-lg w-full object-cover"
+          />
+
+          <div class="pl-3">
+            <h2 class="text-[#FAFAFA] pt-2 pb-1">Breaking Bad</h2>
+            <div class="flex gap-3 pb-1">
+              <h4
+                class="text-[11px] text-[#EEEEEE] bg-[#292929] rounded-xl text-center w-13.5 pt-0.5"
+              >
+                Drame
+              </h4>
+              <h4
+                class="text-[11px] text-[#EEEEEE] bg-[#292929] rounded-xl text-center w-13.5 pt-0.5"
+              >
+                Policier
+              </h4>
+            </div>
+            <p class="text-[#BABABA] text-[11px] pt-1 pb-2">
+              Un professeur de chimie mène une double vie.
+            </p>
+          </div>
+        </article> -->
 
         <!-- <article class="bg-[#191919] border border-[#393939] rounded-lg mt-5">
                 <img src="assets/Vignette · Breaking Bad.png" alt="Breaking Bad Thumbnail"
@@ -196,6 +232,5 @@
             </article> -->
       </div>
     </main>
-    <script src="js/script.js"></script>
   </body>
 </html>
